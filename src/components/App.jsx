@@ -9,8 +9,6 @@ export class App extends Component {
     good: 0,
     neutral: 0,
     bad: 0,
-    total: 0,
-    positiveFeedback: 0,
   };
 
   changeState = type => {
@@ -23,22 +21,14 @@ export class App extends Component {
     if (type === 'bad') {
       this.setState({ bad: this.state.bad + 1 });
     }
-    this.setState(prevState => {
-      return { total: this.countTotalFeedback(prevState) };
-    });
-    this.setState(prevState => {
-      return {
-        positiveFeedback: this.countPositiveFeedbackPercentage(prevState),
-      };
-    });
   };
 
   countTotalFeedback = stateTotal => {
     return stateTotal.bad + stateTotal.good + stateTotal.neutral;
   };
 
-  countPositiveFeedbackPercentage = StateFeedback => {
-    return Math.round((StateFeedback.good * 100) / StateFeedback.total);
+  countPositiveFeedbackPercentage = (good, total) => {
+    return Math.round((good * 100) / total);
   };
 
   render() {
@@ -48,7 +38,6 @@ export class App extends Component {
           height: '100vh',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'center',
           alignItems: 'flex-start',
           paddingLeft: 30,
           fontSize: 30,
@@ -60,8 +49,15 @@ export class App extends Component {
           <FeedbackButton changeState={this.changeState} />
         </Section>
         <Section title="Statistics">
-          {this.state.total ? (
-            <Statistics state={this.state} />
+          {this.countTotalFeedback(this.state) ? (
+            <Statistics
+              state={this.state}
+              total={this.countTotalFeedback(this.state)}
+              positiveFeedback={this.countPositiveFeedbackPercentage(
+                this.state.good,
+                this.countTotalFeedback(this.state)
+              )}
+            />
           ) : (
             <Notification message="There is no feedback" />
           )}

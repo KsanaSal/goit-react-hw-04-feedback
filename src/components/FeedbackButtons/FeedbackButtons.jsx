@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Container, Button } from './FeedbackButtons.styled';
 
 export const FeedbackButton = ({ changeState }) => (
@@ -13,3 +14,5 @@ export const FeedbackButton = ({ changeState }) => (
     </Button>
   </Container>
 );
+
+FeedbackButton.propTypes = { changeState: PropTypes.func.isRequired };
