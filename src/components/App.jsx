@@ -1,5 +1,7 @@
 import { Component } from 'react';
 import { FeedbackButton } from './FeedbackButtons/FeedbackButtons';
+import { Notification } from './Notification/Notification';
+import { Section } from './Section/Section';
 import { Statistics } from './Statistics/Statistics';
 
 export class App extends Component {
@@ -12,14 +14,11 @@ export class App extends Component {
   };
 
   changeState = type => {
-    console.log(type);
     if (type === 'good') {
       this.setState({ good: this.state.good + 1 });
-      // this.countTotalFeedback(this.state)
     }
     if (type === 'neutral') {
       this.setState({ neutral: this.state.neutral + 1 });
-      // this.countTotalFeedback(this.state)
     }
     if (type === 'bad') {
       this.setState({ bad: this.state.bad + 1 });
@@ -28,7 +27,9 @@ export class App extends Component {
       return { total: this.countTotalFeedback(prevState) };
     });
     this.setState(prevState => {
-      return { positiveFeedback: this.countPositiveFeedbackPercentage(prevState) };
+      return {
+        positiveFeedback: this.countPositiveFeedbackPercentage(prevState),
+      };
     });
   };
 
@@ -37,11 +38,10 @@ export class App extends Component {
   };
 
   countPositiveFeedbackPercentage = StateFeedback => {
-    return Math.round(StateFeedback.good * 100 / StateFeedback.total)
-  }
+    return Math.round((StateFeedback.good * 100) / StateFeedback.total);
+  };
 
   render() {
-    console.log(this.state);
     return (
       <div
         style={{
@@ -51,14 +51,21 @@ export class App extends Component {
           justifyContent: 'center',
           alignItems: 'flex-start',
           paddingLeft: 30,
-          fontSize: 40,
+          fontSize: 30,
           fontWeight: 400,
           color: '#010101',
         }}
       >
-        <h1>Please leave feetback</h1>
-        <FeedbackButton changeState={this.changeState} />
-        <Statistics state={this.state} />
+        <Section title="Please leave feetback">
+          <FeedbackButton changeState={this.changeState} />
+        </Section>
+        <Section title="Statistics">
+          {this.state.total ? (
+            <Statistics state={this.state} />
+          ) : (
+            <Notification message="There is no feedback" />
+          )}
+        </Section>
       </div>
     );
   }
