@@ -1,17 +1,15 @@
 import PropTypes from 'prop-types';
 import { Container, Button } from './FeedbackButtons.styled';
 
-export const FeedbackButton = ({ changeState }) => (
+export const FeedbackButton = ({ changeState, options }) => (
   <Container>
-    <Button type="button" onClick={() => changeState('good')}>
-      Good
-    </Button>
-    <Button type="button" onClick={() => changeState('neutral')}>
-      Neutral
-    </Button>
-    <Button type="button" onClick={() => changeState('bad')}>
-      Bad
-    </Button>
+    {options.map(option => {
+      return (
+        <Button key={option} type="button" onClick={() => changeState(option)}>
+          {option}
+        </Button>
+      );
+    })}
   </Container>
 );
 

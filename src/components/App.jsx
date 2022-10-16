@@ -12,23 +12,17 @@ export class App extends Component {
   };
 
   changeState = type => {
-    if (type === 'good') {
-      this.setState({ good: this.state.good + 1 });
-    }
-    if (type === 'neutral') {
-      this.setState({ neutral: this.state.neutral + 1 });
-    }
-    if (type === 'bad') {
-      this.setState({ bad: this.state.bad + 1 });
-    }
+    this.setState(prevState => {
+      return { [type]: prevState[type] + 1 };
+    });
   };
 
-  countTotalFeedback = stateTotal => {
-    return stateTotal.bad + stateTotal.good + stateTotal.neutral;
+  countTotalFeedback = () => {
+    return this.state.bad + this.state.good + this.state.neutral;
   };
 
-  countPositiveFeedbackPercentage = (good, total) => {
-    return Math.round((good * 100) / total);
+  countPositiveFeedbackPercentage = total => {
+    return Math.round((this.state.good * 100) / total);
   };
 
   render() {
@@ -46,16 +40,18 @@ export class App extends Component {
         }}
       >
         <Section title="Please leave feetback">
-          <FeedbackButton changeState={this.changeState} />
+          <FeedbackButton
+            changeState={this.changeState}
+            options={Object.keys(this.state)}
+          />
         </Section>
         <Section title="Statistics">
-          {this.countTotalFeedback(this.state) ? (
+          {this.countTotalFeedback() ? (
             <Statistics
               state={this.state}
-              total={this.countTotalFeedback(this.state)}
+              total={this.countTotalFeedback()}
               positiveFeedback={this.countPositiveFeedbackPercentage(
-                this.state.good,
-                this.countTotalFeedback(this.state)
+                this.countTotalFeedback()
               )}
             />
           ) : (
