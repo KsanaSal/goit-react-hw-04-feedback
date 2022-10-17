@@ -13,4 +13,7 @@ export const FeedbackButton = ({ changeState, options }) => (
   </Container>
 );
 
-FeedbackButton.propTypes = { changeState: PropTypes.func.isRequired };
+FeedbackButton.propTypes = {
+  changeState: PropTypes.func.isRequired,
+  options: PropTypes.arrayOf(PropTypes.string),
+};
